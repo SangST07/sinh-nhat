@@ -11,12 +11,22 @@ const countdown=setInterval(()=>{
     if(elapsed>=10){
       clearInterval(countdown);
       timer.textContent='00:00:00';
-      setTimeout(()=>{finalScreen.classList.remove('show');intro.classList.add('hide');celebrate();},700);
+      setTimeout(()=>{finalScreen.classList.remove('show');intro.classList.add('hide');startBirthdayMusic();celebrate();},700);
     }
   }else{
     timer.textContent=`23:59:${String(50+elapsed).padStart(2,'0')}`;
   }
 },1000);
+
+// Tự phát nhạc đúng lúc bộ đếm kết thúc; hiện nút dự phòng nếu trình duyệt chặn autoplay.
+const birthdayMusic=document.getElementById('birthdayMusic');
+birthdayMusic.volume=0.75;
+async function startBirthdayMusic(){
+  try{
+    await birthdayMusic.play();
+  }catch(error){
+  }
+}
 
 // Hạt sáng li ti chuyển động khắp nền.
 const ambient=document.getElementById('ambient');

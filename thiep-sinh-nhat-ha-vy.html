@@ -113,9 +113,11 @@ body{margin:0;min-height:100vh;overflow:hidden;display:grid;place-items:center;c
 @media(max-width:520px){.scene{width:100vw;height:56.25vw;min-height:0}.card{padding:0}.card h2{font-size:clamp(18px,5vw,29px);margin:2px}.cake-stage{width:96vw;height:38vw;min-height:130px}.hint{font-size:10px}.gift{right:8px;bottom:6px;width:84px;height:76px}.gift-body{left:13px;right:13px;bottom:18px;height:34px}.gift-lid{left:9px;right:9px;bottom:51px}.gift-bow{left:30px;bottom:61px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 
+
 </style>
 </head>
 <body>
+<audio id="birthdayMusic" src="assets/nhac-sinh-nhat.mp3" preload="auto"></audio>
 <canvas id="ambient" aria-hidden="true"></canvas>
 <section class="intro" id="intro" aria-label="Ngày và đồng hồ đếm ngược">
   <div style="text-align:center">
@@ -185,12 +187,22 @@ const countdown=setInterval(()=>{
     if(elapsed>=10){
       clearInterval(countdown);
       timer.textContent='00:00:00';
-      setTimeout(()=>{finalScreen.classList.remove('show');intro.classList.add('hide');celebrate();},700);
+      setTimeout(()=>{finalScreen.classList.remove('show');intro.classList.add('hide');startBirthdayMusic();celebrate();},700);
     }
   }else{
     timer.textContent=`23:59:${String(50+elapsed).padStart(2,'0')}`;
   }
 },1000);
+
+// Tự phát nhạc đúng lúc bộ đếm kết thúc; hiện nút dự phòng nếu trình duyệt chặn autoplay.
+const birthdayMusic=document.getElementById('birthdayMusic');
+birthdayMusic.volume=0.75;
+async function startBirthdayMusic(){
+  try{
+    await birthdayMusic.play();
+  }catch(error){
+  }
+}
 
 // Hạt sáng li ti chuyển động khắp nền.
 const ambient=document.getElementById('ambient');

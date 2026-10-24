@@ -104,3 +104,4 @@ body{margin:0;min-height:100vh;overflow:hidden;display:grid;place-items:center;c
 @keyframes bubble-rise{0%{opacity:0;transform:translateY(20px) scale(.9)}12%,75%{opacity:1}100%{opacity:0;transform:translateY(-45px) scale(1.03)}}
 @media(max-width:520px){.scene{width:100vw;height:56.25vw;min-height:0}.card{padding:0}.card h2{font-size:clamp(18px,5vw,29px);margin:2px}.cake-stage{width:96vw;height:38vw;min-height:130px}.hint{font-size:10px}.gift{right:8px;bottom:6px;width:84px;height:76px}.gift-body{left:13px;right:13px;bottom:18px;height:34px}.gift-lid{left:9px;right:9px;bottom:51px}.gift-bow{left:30px;bottom:61px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+

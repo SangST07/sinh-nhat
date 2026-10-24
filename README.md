@@ -28,3 +28,7 @@ Chạy `CHAY-THU-LINUX-MAC.sh` hoặc `CHAY-THU-WINDOWS.bat` trong thư mục. M
 ## Xóa lời chúc cũ để bắt đầu lại
 
 Nếu muốn danh sách lời chúc trống hoàn toàn, mở Supabase → SQL Editor → New query, dán nội dung `database/xoa-loi-chuc-cu.sql` rồi bấm Run. Lệnh `TRUNCATE` xóa vĩnh viễn tất cả lời chúc hiện tại và đặt lại ID; các lời chúc mới sau đó sẽ tiếp tục được lưu và hiển thị cho khách truy cập. Không chạy lệnh này nếu cần giữ lại lời chúc cũ.
+
+## Nhạc sinh nhật
+
+Khi đếm ngược kết thúc, thiệp thử tự phát `assets/nhac-sinh-nhat.mp3`. Trang thử tự phát khi thiệp mở; một số trình duyệt có thể chặn âm thanh cho đến khi khách tương tác với trang. Khi đăng thiệp, giữ nguyên thư mục `assets` cùng HTML.
