@@ -24,3 +24,7 @@ Không đưa `service_role` key vào HTML. SQL cấp quyền công khai chỉ đ
 Chạy `CHAY-THU-LINUX-MAC.sh` hoặc `CHAY-THU-WINDOWS.bat` trong thư mục. Mở `http://localhost:8000`. Có thể mở bản HTML đơn trực tiếp, nhưng Supabase cần có bảng được tạo trước.
 
 Ảnh và MP3 được đóng gói trong `assets`; trang hiện chưa tự dùng các tài nguyên đó trong giao diện.
+
+## Xóa lời chúc cũ để bắt đầu lại
+
+Nếu muốn danh sách lời chúc trống hoàn toàn, mở Supabase → SQL Editor → New query, dán nội dung `database/xoa-loi-chuc-cu.sql` rồi bấm Run. Lệnh `TRUNCATE` xóa vĩnh viễn tất cả lời chúc hiện tại và đặt lại ID; các lời chúc mới sau đó sẽ tiếp tục được lưu và hiển thị cho khách truy cập. Không chạy lệnh này nếu cần giữ lại lời chúc cũ.
