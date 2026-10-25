@@ -1,34 +1,23 @@
-# Thiệp sinh nhật Hạ Vy — source và tài nguyên
+# Sinh nhật Hạ Vy — mã nguồn và tài nguyên
 
-## Nội dung thư mục
+Gói này được tạo lại từ source WebDev mới nhất. Thư mục gốc có `index.html` để tải lên hosting tĩnh; `src/` chứa CSS/JavaScript; `assets/` chứa ảnh, MP3, biểu tượng iOS và biểu tượng bánh. `thiep-sinh-nhat-ha-vy.html` là bản HTML đơn đã gộp CSS/JavaScript (vẫn cần giữ thư mục `assets/` cạnh file).
 
-- `thiep-sinh-nhat-ha-vy.html`: bản HTML đơn đã điền Project URL và publishable key Supabase.
-- `index.html`: bản source có cấu trúc tách CSS/JavaScript.
-- `src/css/style.css`: giao diện và hiệu ứng.
-- `src/js/app.js`: bộ đếm, bánh 3D, hộp quà và lời chúc Supabase.
-- `database/supabase-loi-chuc.sql`: câu lệnh đầy đủ tạo bảng, chính sách đọc/thêm lời chúc và làm mới schema cache.
-- `assets/`: ảnh và nhạc được gửi kèm.
-- `CHAY-THU-LINUX-MAC.sh`, `CHAY-THU-WINDOWS.bat`: lệnh chạy máy chủ tĩnh thử nghiệm.
+## Tính năng
 
-## Bật lời chúc dùng chung
+- Màn hình đếm 3–2–1 rồi mở thiệp sinh nhật nền đen tím.
+- Bánh kem 3D bằng hạt sáng tự xoay; kéo/vuốt để xoay bánh.
+- Những lời chúc thật lấy từ Supabase bay quanh bánh; bấm thẻ để đọc lời nhắn đầy đủ. Khi chưa có dữ liệu, hiện nút gửi lời chúc đầu tiên, không tạo nội dung giả.
+- Nhạc thử tự phát khi mở thiệp; một số trình duyệt chặn autoplay cho đến khi có thao tác.
+- PWA trên website Manus dùng manifest nền tảng; có biểu tượng Apple Touch cho iOS. Android: Chrome → ⋮ → Cài đặt ứng dụng/Thêm vào màn hình chính. iPhone/iPad: Safari → Chia sẻ → Thêm vào Màn hình chính.
 
-1. Mở Supabase Dashboard, chọn dự án, vào **SQL Editor → New query**.
-2. Sao chép toàn bộ `database/supabase-loi-chuc.sql` vào SQL Editor rồi bấm **Run**.
-3. Chờ lệnh chạy thành công, sau đó tải lại trang thiệp. URL và publishable key đã được điền trong cả hai bản code.
-4. Đưa trang lên hosting để khách cùng mở một URL. Nếu dùng source tách file, hãy tải lên cả thư mục, không chỉ riêng `index.html`.
+## Chạy thử
 
-Không đưa `service_role` key vào HTML. SQL cấp quyền công khai chỉ đọc và thêm lời chúc; không cấp sửa/xóa.
+Chạy `CHAY-THU-LINUX-MAC.sh` hoặc `CHAY-THU-WINDOWS.bat`, rồi mở `http://localhost:8000`. Để chạy trên hosting, tải lên toàn bộ thư mục, không chỉ riêng `index.html`.
 
-## Chạy thử trên máy
+## Supabase
 
-Chạy `CHAY-THU-LINUX-MAC.sh` hoặc `CHAY-THU-WINDOWS.bat` trong thư mục. Mở `http://localhost:8000`. Có thể mở bản HTML đơn trực tiếp, nhưng Supabase cần có bảng được tạo trước.
+Trang dùng `birthday_wishes` với Project URL và publishable key đã được cấu hình trong `src/js/app.js`. Publishable key được thiết kế để dùng ở trình duyệt; không bao giờ thay bằng `service_role`. Nếu khởi tạo một Supabase project khác, chạy `database/supabase-loi-chuc.sql` trong SQL Editor.
 
-Ảnh và MP3 được đóng gói trong `assets`; trang hiện chưa tự dùng các tài nguyên đó trong giao diện.
+Supabase đang dùng cho thiệp hiện không có bản ghi lời chúc cũ (danh sách đã trống khi kiểm tra). Archive chỉ chứa source, tài nguyên và SQL mẫu, **không chứa dữ liệu lời chúc cá nhân**. `database/xoa-loi-chuc-cu.sql` có lệnh TRUNCATE xóa vĩnh viễn toàn bộ lời chúc; chỉ chạy khi chủ động muốn xóa sạch lần nữa.
 
-## Xóa lời chúc cũ để bắt đầu lại
-
-Nếu muốn danh sách lời chúc trống hoàn toàn, mở Supabase → SQL Editor → New query, dán nội dung `database/xoa-loi-chuc-cu.sql` rồi bấm Run. Lệnh `TRUNCATE` xóa vĩnh viễn tất cả lời chúc hiện tại và đặt lại ID; các lời chúc mới sau đó sẽ tiếp tục được lưu và hiển thị cho khách truy cập. Không chạy lệnh này nếu cần giữ lại lời chúc cũ.
-
-## Nhạc sinh nhật
-
-Khi đếm ngược kết thúc, thiệp thử tự phát `assets/nhac-sinh-nhat.mp3`. Trang thử tự phát khi thiệp mở; một số trình duyệt có thể chặn âm thanh cho đến khi khách tương tác với trang. Khi đăng thiệp, giữ nguyên thư mục `assets` cùng HTML.
+Website đang dùng cùng URL cố định: https://birthdayhy-dgtj74ae.manus.space

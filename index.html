@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#2c142b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Thiệp Hạ Vy">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Chúc mừng sinh nhật Hạ Vy</title>
+<link rel="icon" type="image/svg+xml" href="assets/cake-logo.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
 <audio id="birthdayMusic" src="assets/nhac-sinh-nhat.mp3" preload="auto"></audio>
 <canvas id="ambient" aria-hidden="true"></canvas>
-<section class="intro" id="intro" aria-label="Ngày và đồng hồ đếm ngược">
-  <div style="text-align:center">
-    <p class="date-line">6 tháng 11 năm 2026</p>
-    <div class="timer" id="timer">23:59:50</div>
-  </div>
-</section>
-<section class="final-screen" id="finalScreen" aria-live="assertive">
-  <div><p>Chuẩn bị mở thiệp sinh nhật Hạ Vy! 🎉</p><span id="lastNumber">3</span></div>
+<section class="intro" id="intro" aria-label="Đếm ngược mở thiệp">
+  <span id="lastNumber" aria-live="assertive">3</span>
 </section>
 <aside class="guestbook">
   <button class="guestbook-toggle" id="guestbookToggle" type="button" aria-expanded="false">Gửi lời chúc 💌</button>
@@ -38,10 +38,15 @@
   <section class="card">
     <h2>Chúc mừng sinh nhật<br>Hạ Vy!</h2>
     <p class="event-date">Ngày 7 tháng 11 năm 2026</p>
-    <div class="cake-stage" id="cakeStage" aria-label="Kéo hoặc vuốt để xoay bánh kem">
+    <div class="cake-stage" id="cakeStage" aria-label="Bánh sinh nhật 3D tạo từ hạt sáng, kéo để xoay">
       <div class="cake-aura"></div>
       <span class="star s1">✦</span><span class="star s2">✧</span><span class="star s3">✧</span><span class="star s4">✦</span>
-      <canvas id="cakeCanvas" aria-label="Bánh sinh nhật 3D làm từ các hạt sáng"></canvas>
+      <canvas id="cakeCanvas" aria-label="Bánh sinh nhật 3D tạo từ những hạt sáng"></canvas>
+      <div class="wish-orbit" id="wishOrbit" aria-label="Lời chúc của mọi người quanh bánh kem">
+        <button class="wish-orbit-item wish-orbit-empty" id="wishOrbitEmpty" type="button">
+          <strong>Gửi lời chúc đầu tiên ✨</strong><span>Lời chúc thật sẽ bay quanh bánh kem</span>
+        </button>
+      </div>
     </div>
     <p class="hint">Kéo hoặc vuốt bánh để xoay 🎂</p>
     <button class="gift" id="openGift" type="button" aria-label="Mở hộp quà lời chúc">
@@ -63,7 +68,6 @@
     <button class="return-button" id="returnToCard" type="button">Quay lại thiệp sinh nhật</button>
   </div>
 </section>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="src/js/app.js"></script>
 </body>
