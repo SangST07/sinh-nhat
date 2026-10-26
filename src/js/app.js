@@ -1,4 +1,9 @@
 // Màn hình mở đầu chỉ đếm 3, 2, 1 rồi tự mở thiệp.
+const coarsePointer=window.matchMedia('(pointer:coarse)').matches;
+const compactViewport=window.matchMedia('(max-width:600px)').matches||window.matchMedia('(max-height:520px) and (orientation:landscape)').matches;
+const lowPowerMode=(coarsePointer&&compactViewport)||(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4;
+const particleFactor=lowPowerMode?0.48:1;
+const scaledCount=count=>Math.max(8,Math.round(count*particleFactor));
 const intro=document.getElementById('intro');
 const lastNumber=document.getElementById('lastNumber');
 let remaining=3;
@@ -27,17 +32,21 @@ const ambient=document.getElementById('ambient');
 const actx=ambient.getContext('2d');
 let dust=[];
 function resizeDust(){
-  const dpr=Math.min(devicePixelRatio||1,2);
+  const dpr=Math.min(devicePixelRatio||1,lowPowerMode?1.2:1.75);
   ambient.width=innerWidth*dpr;ambient.height=innerHeight*dpr;
   actx.setTransform(dpr,0,0,dpr,0,0);
-  dust=Array.from({length:Math.min(110,Math.round(innerWidth*innerHeight/9000))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:.6+Math.random()*1.8,vy:.12+Math.random()*.38,p:Math.random()*6.28,h:Math.random()<.55?332:45}));
+  const dustCount=Math.max(1,Math.min(lowPowerMode?34:110,Math.round(innerWidth*innerHeight/(lowPowerMode?16000:9000))));
+  dust=Array.from({length:dustCount},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:.6+Math.random()*1.8,vy:.12+Math.random()*.38,p:Math.random()*6.28,h:Math.random()<.55?332:45}));
 }
+let lastDustFrame=0;
 function drawDust(t){
+  if(document.hidden||(lowPowerMode&&t-lastDustFrame<1000/24)){requestAnimationFrame(drawDust);return;}
+  lastDustFrame=t;
   actx.clearRect(0,0,innerWidth,innerHeight);
   for(const d of dust){
     d.y-=d.vy;if(d.y< -5){d.y=innerHeight+5;d.x=Math.random()*innerWidth}
     const a=.28+.55*((Math.sin(t/650+d.p)+1)/2);
-    actx.beginPath();actx.fillStyle=`hsla(${d.h},100%,82%,${a})`;actx.shadowColor=`hsla(${d.h},100%,75%,${a})`;actx.shadowBlur=8;actx.arc(d.x,d.y,d.r,0,Math.PI*2);actx.fill();
+    actx.beginPath();actx.fillStyle=`hsla(${d.h},100%,82%,${a})`;actx.shadowColor=`hsla(${d.h},100%,75%,${a})`;actx.shadowBlur=lowPowerMode?3:8;actx.arc(d.x,d.y,d.r,0,Math.PI*2);actx.fill();
   }
   actx.shadowBlur=0;requestAnimationFrame(drawDust);
 }
@@ -227,7 +236,8 @@ if(sharedDb){
 // Pháo giấy khi thiệp xuất hiện.
 function celebrate(){
   const colors=['#ff4d8d','#ffd166','#7bdff2','#b8f2a1','#c77dff'];
-  for(let i=0;i<55;i++){
+  const pieceCount=lowPowerMode?24:55;
+  for(let i=0;i<pieceCount;i++){
     const bit=document.createElement('i');bit.className='confetti';bit.style.left=Math.random()*100+'vw';bit.style.background=colors[Math.floor(Math.random()*colors.length)];bit.style.animationDuration=2.5+Math.random()*2.5+'s';bit.style.animationDelay=Math.random()*1.2+'s';document.body.appendChild(bit);setTimeout(()=>bit.remove(),6000);
   }
 }
@@ -242,13 +252,15 @@ function buildCakeParticles(){
   const pts=[];
   const add=(x,y,z,color,size,glow=1)=>pts.push({x,y,z,color,size,glow,phase:Math.random()*Math.PI*2});
   function fillTier(radius,y0,y1,colors,count){
-    for(let i=0;i<count;i++){
+    const total=scaledCount(count);
+    for(let i=0;i<total;i++){
       const a=Math.random()*Math.PI*2,r=radius*Math.sqrt(Math.random());
       add(Math.cos(a)*r,y0+Math.random()*(y1-y0),Math.sin(a)*r,colors[Math.floor(Math.random()*colors.length)],.7+Math.random()*1.65,.7+Math.random());
     }
   }
   function ring(radius,y,color,count,size=1.6){
-    for(let i=0;i<count;i++){const a=i/count*Math.PI*2;add(Math.cos(a)*radius,y,Math.sin(a)*radius,color,size+Math.random(),1.2)}
+    const total=scaledCount(count);
+    for(let i=0;i<total;i++){const a=i/total*Math.PI*2;add(Math.cos(a)*radius,y,Math.sin(a)*radius,color,size+Math.random(),1.2)}
   }
   // Hai tầng bánh, phủ kem và các đường viền hạt sáng.
   fillTier(56,-36,5,['#ff2f9a','#ff55ba','#c535ff','#ff86d2'],1550);
@@ -259,23 +271,29 @@ function buildCakeParticles(){
   ring(39,7,'#fff1ff',170,1.5);ring(39,35,'#ffc8f0',155,1.7);
   ring(37,58,'#fff4ff',150,1.7);
   // Kem chảy thành giọt quanh tầng trên.
-  for(let i=0;i<180;i++){
-    const a=i/180*Math.PI*2,r=37+Math.random()*1.5,drop=3+Math.random()*10;
+  const icingCount=scaledCount(180);
+  for(let i=0;i<icingCount;i++){
+    const a=i/icingCount*Math.PI*2,r=37+Math.random()*1.5,drop=3+Math.random()*10;
     for(let j=0;j<5;j++)add(Math.cos(a)*r,56-drop*j/5,Math.sin(a)*r,j%2?'#ffe1f8':'#fff5ff',1+Math.random()*1.2,1.4);
   }
   // Nến ba màu và ngọn lửa lấp lánh.
   const candles=[[-15,66,-7],[0,67,0],[15,66,7]];
+  const candleCount=scaledCount(95),flameCount=scaledCount(70);
   for(const [x,y,z] of candles){
-    for(let j=0;j<95;j++)add(x+(Math.random()-.5)*3,y+Math.random()*23,z+(Math.random()-.5)*3,j%3?'#ffd9f5':'#fff2a8',1+Math.random()*1.2,1.5);
-    for(let j=0;j<70;j++){const a=Math.random()*Math.PI*2,r=Math.random()*4;add(x+Math.cos(a)*r,y+24+Math.random()*9,z+Math.sin(a)*r,['#fff6a8','#ff8c38','#ff4eb8'][j%3],1+Math.random()*1.8,2.2)}
+    for(let j=0;j<candleCount;j++)add(x+(Math.random()-.5)*3,y+Math.random()*23,z+(Math.random()-.5)*3,j%3?'#ffd9f5':'#fff2a8',1+Math.random()*1.2,1.5);
+    for(let j=0;j<flameCount;j++){const a=Math.random()*Math.PI*2,r=Math.random()*4;add(x+Math.cos(a)*r,y+24+Math.random()*9,z+Math.sin(a)*r,['#fff6a8','#ff8c38','#ff4eb8'][j%3],1+Math.random()*1.8,2.2)}
   }
   // Hạt bụi sao rời bay quanh mô hình.
-  for(let i=0;i<180;i++){const a=Math.random()*Math.PI*2,r=62+Math.random()*45;add(Math.cos(a)*r,(Math.random()-.5)*130,Math.sin(a)*r,Math.random()<.5?'#ff71d1':'#bd8bff',.65+Math.random()*1.35,.8)}
+  const starDustCount=scaledCount(180);
+  for(let i=0;i<starDustCount;i++){const a=Math.random()*Math.PI*2,r=62+Math.random()*45;add(Math.cos(a)*r,(Math.random()-.5)*130,Math.sin(a)*r,Math.random()<.5?'#ff71d1':'#bd8bff',.65+Math.random()*1.35,.8)}
   return pts;
 }
 cakeParticles=buildCakeParticles();
+let lastCakeFrame=0;
 function drawCake(time){
-  const rect=cakeCanvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+  if(document.hidden||(lowPowerMode&&time-lastCakeFrame<1000/30)){requestAnimationFrame(drawCake);return;}
+  lastCakeFrame=time;
+  const rect=cakeCanvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,lowPowerMode?1.2:1.75);
   const pw=Math.max(1,Math.round(rect.width*dpr)),ph=Math.max(1,Math.round(rect.height*dpr));
   if(cakeCanvas.width!==pw||cakeCanvas.height!==ph){cakeCanvas.width=pw;cakeCanvas.height=ph;}
   const w=pw/dpr,h=ph/dpr;cakeCtx.setTransform(dpr,0,0,dpr,0,0);cakeCtx.clearRect(0,0,w,h);
@@ -291,7 +309,7 @@ function drawCake(time){
   }).sort((a,b)=>a.z-b.z);
   for(const p of points){
     const flicker=.72+.28*Math.sin(time*.004+p.phase);
-    cakeCtx.globalAlpha=p.g*flicker;cakeCtx.fillStyle=p.c;cakeCtx.shadowColor=p.c;cakeCtx.shadowBlur=3+p.g*5;
+    cakeCtx.globalAlpha=p.g*flicker;cakeCtx.fillStyle=p.c;cakeCtx.shadowColor=p.c;cakeCtx.shadowBlur=lowPowerMode?2:3+p.g*5;
     cakeCtx.beginPath();cakeCtx.arc(p.x,p.y,Math.max(.55,p.size),0,Math.PI*2);cakeCtx.fill();
   }
   cakeCtx.globalAlpha=1;cakeCtx.shadowBlur=0;requestAnimationFrame(drawCake);
@@ -304,7 +322,10 @@ cakeStage.addEventListener('pointerup',stopCakeDrag);cakeStage.addEventListener(
 
 // Các thẻ lời chúc gần đây chạy theo quỹ đạo quanh bánh, độc lập với thao tác xoay mô hình 3D.
 const reduceOrbitMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lastOrbitFrame=0;
 function animateWishOrbit(now){
+  if(document.hidden||(lowPowerMode&&now-lastOrbitFrame<1000/30)){requestAnimationFrame(animateWishOrbit);return;}
+  lastOrbitFrame=now;
   const items=[...wishOrbit.children];
   if(items.length){
     const rect=cakeStage.getBoundingClientRect();

@@ -171,3 +171,11 @@ body{margin:0;min-height:100vh;overflow:hidden;display:grid;place-items:center;c
   .wish-wall{left:calc(env(safe-area-inset-left,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
   .gift{right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
 }
+
+/* Low-cost visual profile for compact touch devices. */
+@media (pointer:coarse) and (max-width:600px), (pointer:coarse) and (max-height:520px) and (orientation:landscape){
+  #cakeCanvas{filter:drop-shadow(0 0 10px #ff9ec466)}
+  .cake-aura{animation-duration:3s}
+  .wish-orbit-item,.wish-wall,.guestbook-panel{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .modal{-webkit-backdrop-filter:brightness(.58);backdrop-filter:brightness(.58)}
+}
