@@ -115,3 +115,59 @@ body{margin:0;min-height:100vh;overflow:hidden;display:grid;place-items:center;c
 
 .intro{background:radial-gradient(ellipse at 50% 48%,#351044 0,#190c25 48%,#05040b 100%);background-image:radial-gradient(circle,#ff4eb8 1.4px,transparent 2px),radial-gradient(circle,#9e53ff 1.3px,transparent 2px),radial-gradient(ellipse at 50% 48%,#351044 0,#190c25 48%,#05040b 100%);background-size:67px 67px,97px 97px,auto;background-position:0 0,22px 34px,center}
 .intro #lastNumber{color:#ff70cf;text-shadow:0 0 25px #ff42c8,0 0 55px #a346ff}
+
+/* iPhone and Android portrait: use the complete tall viewport, not a cropped 16:9 card. */
+@media (max-width:600px) and (orientation:portrait){
+  .scene{width:100vw;height:100vh;min-height:100svh;aspect-ratio:auto}
+  @supports (height:100dvh){.scene{height:100dvh;min-height:100dvh}}
+  .card{justify-content:flex-start;padding:calc(env(safe-area-inset-top,0px) + 58px) 12px calc(env(safe-area-inset-bottom,0px) + 86px)}
+  .card h2{margin:2px 0 5px;font-size:clamp(24px,7vw,34px)}
+  .event-date{margin:0 0 5px;font-size:clamp(14px,4vw,17px)}
+  .cake-stage{width:min(96vw,520px);height:clamp(220px,43vh,390px);min-height:0;flex:0 0 auto}
+  @supports (height:43dvh){.cake-stage{height:clamp(220px,43dvh,390px)}}
+  .hint{margin:2px 0 0;font-size:11px}
+  .guestbook{top:calc(env(safe-area-inset-top,0px) + 8px);right:calc(env(safe-area-inset-right,0px) + 8px)}
+  .guestbook-toggle{padding:9px 12px;font-size:13px}
+  .wish-wall{left:calc(env(safe-area-inset-left,0px) + 8px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);width:min(62vw,250px);max-height:22vh}
+  @supports (max-height:22dvh){.wish-wall{max-height:22dvh}}
+  .gift{right:calc(env(safe-area-inset-right,0px) + 8px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
+}
+
+/* iPad/tablet portrait: frame the invitation close to a 3:4 canvas. */
+@media (min-width:601px) and (max-width:1100px) and (orientation:portrait){
+  .scene{width:min(100vw,75vh);height:min(100vh,133.3333vw);aspect-ratio:3/4}
+  @supports (height:100dvh){.scene{width:min(100vw,75dvh);height:min(100dvh,133.3333vw)}}
+  .card{padding:calc(env(safe-area-inset-top,0px) + 24px) 18px calc(env(safe-area-inset-bottom,0px) + 24px)}
+  .cake-stage{width:min(88vw,680px);height:min(54vh,580px);min-height:300px;flex:0 0 auto}
+  @supports (height:54dvh){.cake-stage{height:min(54dvh,580px)}}
+  .guestbook{top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 12px)}
+  .wish-wall{left:calc(env(safe-area-inset-left,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px);max-height:25vh}
+  .gift{right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
+}
+
+/* Landscape phones and compact Android tablets use their full native viewport. */
+@media (max-width:900px) and (orientation:landscape){
+  .scene{width:100vw;height:100vh;min-height:100svh;aspect-ratio:auto}
+  @supports (height:100dvh){.scene{height:100dvh;min-height:100dvh}}
+  .card{justify-content:flex-start;padding:calc(env(safe-area-inset-top,0px) + 8px) calc(env(safe-area-inset-right,0px) + 18px) calc(env(safe-area-inset-bottom,0px) + 16px) calc(env(safe-area-inset-left,0px) + 18px)}
+  .card h2{font-size:clamp(20px,5vh,32px);margin:2px 0}
+  .event-date{margin:2px 0 4px;font-size:clamp(13px,3vh,18px)}
+  .cake-stage{width:min(78vw,980px);height:min(40vh,340px);min-height:150px;flex:0 0 auto}
+  @supports (height:40dvh){.cake-stage{height:min(40dvh,340px)}}
+  .hint{font-size:10px}
+  .guestbook{top:calc(env(safe-area-inset-top,0px) + 8px);right:calc(env(safe-area-inset-right,0px) + 8px)}
+  .wish-wall{left:calc(env(safe-area-inset-left,0px) + 8px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);width:min(34vw,280px);max-height:30vh}
+  .gift{right:calc(env(safe-area-inset-right,0px) + 8px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);width:76px;height:68px}
+}
+
+/* Full-size iPad/tablet landscape: keep the device's roughly 4:3 view instead of letterboxing 16:9. */
+@media (min-width:901px) and (max-width:1400px) and (orientation:landscape){
+  .scene{width:100vw;height:100vh;aspect-ratio:auto}
+  @supports (height:100dvh){.scene{height:100dvh}}
+  .card{padding:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-right,0px) + 24px) calc(env(safe-area-inset-bottom,0px) + 20px) calc(env(safe-area-inset-left,0px) + 24px)}
+  .cake-stage{width:min(86vw,980px);height:min(56vh,580px);min-height:300px;flex:0 0 auto}
+  @supports (height:56dvh){.cake-stage{height:min(56dvh,580px)}}
+  .guestbook{top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 12px)}
+  .wish-wall{left:calc(env(safe-area-inset-left,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
+  .gift{right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
+}

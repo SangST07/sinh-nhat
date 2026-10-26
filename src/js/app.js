@@ -280,7 +280,8 @@ function drawCake(time){
   if(cakeCanvas.width!==pw||cakeCanvas.height!==ph){cakeCanvas.width=pw;cakeCanvas.height=ph;}
   const w=pw/dpr,h=ph/dpr;cakeCtx.setTransform(dpr,0,0,dpr,0,0);cakeCtx.clearRect(0,0,w,h);
   if(!draggingCake)rotY+=.0015;
-  const scale=Math.min(w/170,h/172)*.82,cx=w/2,cy=h/2+30*scale;
+  const compactLandscape=window.matchMedia('(orientation:landscape) and (max-height:520px)').matches;
+  const scale=Math.min(w/170,h/172)*(compactLandscape ? .62 : .82),cx=w/2,cy=h/2+30*scale;
   const cyR=Math.cos(rotY),syR=Math.sin(rotY),cxR=Math.cos(rotX),sxR=Math.sin(rotX);
   const points=cakeParticles.map(p=>{
     const x=p.x*cyR-p.z*syR,z1=p.x*syR+p.z*cyR;
